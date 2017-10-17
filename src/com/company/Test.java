@@ -18,7 +18,7 @@ public class Test {
         GameOver gameOver = new GameOver();
 
 
-        gameOver.endGame(20,terminal);
+        gameOver.endGame(4999,terminal);
 
     }
 }

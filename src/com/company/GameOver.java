@@ -1,28 +1,33 @@
 package com.company;
-import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class GameOver {
 
     private List<Integer> highScore = new ArrayList<>();
 
     public void endGame(int points, Terminal terminal)throws IOException {
-
+        String banner = "gameover.txt";
+        File fileBanner = new File(banner);
+        Scanner printBanner = new Scanner(fileBanner);
         String input = "highscore.txt";
         File f = new File((input));
         if (f.exists()) {
             Scanner sc = new Scanner(f);
-            while (sc.hasNextLine()) {
-                highScore.add(sc.nextInt());
+            int counter = 0;
+            while (sc.hasNextInt()) {
+                if(counter == 9) {
+                    break;
+                }
+                int tempInt = sc.nextInt();
+                highScore.add(tempInt);
+                counter++;
             }
             highScore.add(points);
             Collections.sort(highScore);
+            Collections.reverse(highScore);
         }
         else{
             f.createNewFile();
@@ -33,20 +38,32 @@ public class GameOver {
         // creates a FileWriter Object
 
         FileWriter writer = new FileWriter(input);
+        BufferedWriter bw = new BufferedWriter(writer);
 
 
 
 
 
-        for (Integer point: highScore) {
-            writer.write(point);
-            System.out.println(point);
+        for (int i = 0; i < highScore.size() && i<10 ;i++) {
+            bw.write(highScore.get(i).toString() + "\n");
+            System.out.println(highScore.get(i));
         }
         // Writes the content to the file
-        writer.flush();
+        bw.flush();
+        bw.close();
         writer.close();
 
         terminal.clearScreen();
+
+        int q = 1;
+        while(printBanner.hasNextLine()) {
+            String tempLine = printBanner.nextLine();
+            terminal.moveCursor(12,q++);
+            for (int i = 0; i< tempLine.length();i++) {
+                terminal.putCharacter(tempLine.charAt(i));
+            }
+        }
+
         int y = 10;
 
 
