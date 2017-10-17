@@ -1,6 +1,7 @@
 package com.company;
 
 public interface GameObject {
-    void draw();
-
+    String getGameObjectType();
+    Position getCurrentPosition();
+    char getRepresentation();
 }
