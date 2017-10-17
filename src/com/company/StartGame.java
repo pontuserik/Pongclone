@@ -13,54 +13,20 @@ import java.nio.charset.Charset;
 import java.util.Scanner;
 
 public class StartGame {
-    public void startGameApp() throws IOException, InterruptedException, MidiUnavailableException, InvalidMidiDataException {
+    public void startGameApp(Terminal terminal) throws IOException, InterruptedException, MidiUnavailableException, InvalidMidiDataException {
 
-        Terminal terminal = TerminalFacade.createTerminal(System.in,
-                System.out, Charset.forName("UTF8"));
-        terminal.enterPrivateMode();
+        Sequencer sequencer = startMusic();
 
-        Sequencer sequencer = MidiSystem.getSequencer();
-
-        sequencer.open();
-        String path = "C:\\Users\\Administrator\\Documents\\Java\\GameProject\\src\\se\\thommyberglund\\music.mid";
-        String path2 = "C:\\Users\\Administrator\\Documents\\Java\\GameProject\\src\\se\\thommyberglund\\metroid.mid";
-        String path3 = "C:\\Users\\Administrator\\Documents\\Git\\Pongclone\\tetris.mid";
-        InputStream zelda = new BufferedInputStream(new FileInputStream(new File(path)));
-        InputStream metroid = new BufferedInputStream(new FileInputStream(new File(path2)));
-        InputStream tetris = new BufferedInputStream(new FileInputStream(new File(path3)));
-
-        sequencer.setSequence(tetris);
         doThread threading = new doThread(sequencer);
+
         threading.start();
 
-        int q = 3;
-        String banner = "intro.txt";
-        File fileBanner = new File(banner);
-        Scanner printBanner = new Scanner(fileBanner);
-        while(printBanner.hasNextLine()) {
-            String tempLine = printBanner.nextLine();
-            terminal.moveCursor(12,q++);
-            for (int i = 0; i< tempLine.length();i++) {
-                terminal.putCharacter(tempLine.charAt(i));
-            }
-        }
-        terminal.setCursorVisible(false);
+        showBanner(terminal);
 
-        String startGame = "Start Game";
-        String quitGame = "Quit Game";
+        menu(terminal, sequencer, threading);
+    }
 
-        terminal.moveCursor(20,20);
-        for (int i = 0; i< startGame.length();i++) {
-            terminal.putCharacter(startGame.charAt(i));
-        }
-
-        terminal.moveCursor(20,22);
-        for (int i = 0; i< quitGame.length();i++) {
-            terminal.putCharacter(quitGame.charAt(i));
-        }
-
-        terminal.moveCursor(18,20);
-        terminal.putCharacter('*');
+    private void menu(Terminal terminal, Sequencer sequencer, doThread threading) throws InterruptedException {
         int position = 1;
         while(true){
             Key key;
@@ -99,5 +65,47 @@ public class StartGame {
 
             }
         }
+    }
+
+    private void showBanner(Terminal terminal) throws FileNotFoundException {
+        int q = 3;
+        String banner = "intro.txt";
+        File fileBanner = new File(banner);
+        Scanner printBanner = new Scanner(fileBanner);
+        while(printBanner.hasNextLine()) {
+            String tempLine = printBanner.nextLine();
+            terminal.moveCursor(12,q++);
+            for (int i = 0; i< tempLine.length();i++) {
+                terminal.putCharacter(tempLine.charAt(i));
+            }
+        }
+        terminal.setCursorVisible(false);
+
+        String startGame = "Start Game";
+        String quitGame = "Quit Game";
+
+        terminal.moveCursor(20,20);
+        for (int i = 0; i< startGame.length();i++) {
+            terminal.putCharacter(startGame.charAt(i));
+        }
+
+        terminal.moveCursor(20,22);
+        for (int i = 0; i< quitGame.length();i++) {
+            terminal.putCharacter(quitGame.charAt(i));
+        }
+
+        terminal.moveCursor(18,20);
+        terminal.putCharacter('*');
+    }
+
+    private Sequencer startMusic() throws MidiUnavailableException, IOException, InvalidMidiDataException {
+        Sequencer sequencer = MidiSystem.getSequencer();
+
+        sequencer.open();
+        String path3 = "tetris.mid";
+        InputStream tetris = new BufferedInputStream(new FileInputStream(new File(path3)));
+
+        sequencer.setSequence(tetris);
+        return sequencer;
     }
 }
