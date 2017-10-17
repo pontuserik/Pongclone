@@ -16,15 +16,15 @@ public class Test {
         Terminal terminal = TerminalFacade.createTerminal(System.in,
                 System.out, Charset.forName("UTF8"));
         terminal.enterPrivateMode();
-/*
 
         GameOver go = new GameOver();
-        go.endGame(10000,terminal);
-*/
+        go.endGame(20000,"Jimmy",terminal);
+/*
 
         StartGame sg = new StartGame();
 
         sg.startGameApp(terminal);
+*/
 
 
     }
