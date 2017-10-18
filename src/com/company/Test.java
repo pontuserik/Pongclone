@@ -17,15 +17,14 @@ public class Test {
                 System.out, Charset.forName("UTF8"));
         terminal.enterPrivateMode();
 
+        StartGame sg = new StartGame();
+        sg.startGameApp(terminal);
+
+
+/*
         GameOver go = new GameOver();
         go.endGame(20000,"Jimmy",terminal);
-/*
-
-        StartGame sg = new StartGame();
-
-        sg.startGameApp(terminal);
 */
-
 
     }
 }

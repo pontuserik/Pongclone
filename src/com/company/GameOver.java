@@ -10,15 +10,28 @@ public class GameOver {
 
 
 
-    public void endGame(int points,String name, Terminal terminal)throws IOException {
+    public void endGame(int points, Terminal terminal)throws IOException {
+
+        String name = playerName(terminal);
 
         PlayerScore player = new PlayerScore(name, points);
 
+        playerName(terminal);
         showBanner(terminal);
         printWriteFile(points,name);
         printHighscore(terminal);
     }
 
+
+    private String playerName(Terminal terminal){
+        terminal.clearScreen();
+        terminal.setCursorVisible(false);
+        terminal.moveCursor(12,10);
+        terminal.putCharacter('c');
+
+        Scanner sc = new Scanner(System.in);
+        String name = sc.nextLine();
+        return name;}
     private void printHighscore(Terminal terminal) {
         int y = 10;
         for (PlayerScore p : highScore) {

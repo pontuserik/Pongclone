@@ -4,6 +4,7 @@ import com.googlecode.lanterna.TerminalFacade;
 import com.googlecode.lanterna.input.Key;
 import com.googlecode.lanterna.terminal.Terminal;
 
+
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
@@ -13,6 +14,7 @@ import java.nio.charset.Charset;
 import java.util.Scanner;
 
 public class StartGame {
+
     public void startGameApp(Terminal terminal) throws IOException, InterruptedException, MidiUnavailableException, InvalidMidiDataException {
 
         Sequencer sequencer = startMusic();
@@ -24,7 +26,12 @@ public class StartGame {
         showBanner(terminal);
 
         menu(terminal, sequencer, threading);
+
+
+
     }
+
+
 
     private void menu(Terminal terminal, Sequencer sequencer, doThread threading) throws InterruptedException {
         int position = 1;
