@@ -71,6 +71,7 @@ public class StartGame {
                     }
 
             }
+            break;
         }
     }
 

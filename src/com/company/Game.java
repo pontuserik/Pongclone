@@ -49,12 +49,8 @@ public class Game {
         }
     }
 
-    public void doGame()throws InterruptedException {
+    public void doGame(Terminal terminal)throws InterruptedException {
 
-        Terminal terminal = TerminalFacade.createTerminal(System.in,
-                System.out, Charset.forName("UTF8"));
-        terminal.enterPrivateMode();
-        terminal.setCursorVisible(false);
         getObjectsList(gameObjects);
         GameObject ball = gameObjects.get(0);
         GameObject player1 = gameObjects.get(1);
@@ -197,6 +193,8 @@ public class Game {
                 moveObject(ball, new Move("PlayerBallMaxDown"));
             } else {
                 // Dies.
+                player1Score = 0;
+
             }
         } else if (ballCurrentPosition.x == opponentCurrentPosition.x) {
             if (ballCurrentPosition.y == opponentCurrentPosition.y - 2) {
