@@ -16,6 +16,8 @@ public class GameOver {
 
         PlayerScore player = new PlayerScore(name, points);
 
+
+
         playerName(terminal);
         showBanner(terminal);
         printWriteFile(points,name);
@@ -27,10 +29,14 @@ public class GameOver {
         terminal.clearScreen();
         terminal.setCursorVisible(false);
         terminal.moveCursor(12,10);
-        terminal.putCharacter('c');
+        String writeName = "Vänligen skriv ditt namn:";
+        for (int i = 0; i < writeName.length();i++) {
+            terminal.putCharacter(writeName.charAt(i));
+        }
+        String name = "0";
 
-        Scanner sc = new Scanner(System.in);
-        String name = sc.nextLine();
+                //terminal.readInput();
+
         return name;}
     private void printHighscore(Terminal terminal) {
         int y = 10;
