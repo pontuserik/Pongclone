@@ -1,8 +1,12 @@
 package com.company;
+import com.googlecode.lanterna.input.Key;
 import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.*;
 import java.util.*;
+
+import static com.googlecode.lanterna.input.Key.Kind.ArrowUp;
+import static com.googlecode.lanterna.input.Key.Kind.Enter;
 
 public class GameOver {
 
@@ -10,7 +14,7 @@ public class GameOver {
 
 
 
-    public void endGame(int points, Terminal terminal)throws IOException {
+    public void endGame(int points, Terminal terminal) throws IOException, InterruptedException {
 
         String name = playerName(terminal);
 
@@ -25,19 +29,33 @@ public class GameOver {
     }
 
 
-    private String playerName(Terminal terminal){
+    private String playerName(Terminal terminal) throws InterruptedException {
         terminal.clearScreen();
-        terminal.setCursorVisible(false);
+        terminal.setCursorVisible(true);
         terminal.moveCursor(12,10);
         String writeName = "Vänligen skriv ditt namn:";
         for (int i = 0; i < writeName.length();i++) {
             terminal.putCharacter(writeName.charAt(i));
         }
-        String name = "0";
 
-                //terminal.readInput();
+        String name = "";
+        String keyString = "";
+        Key key;
 
-        return name;}
+        while(true) {
+            key = terminal.readInput();
+            if (key != null && key.getKind() != Enter) {
+                keyString = key.toString();
+                name = name + keyString.charAt(keyString.length() - 1);
+                terminal.putCharacter(key.getCharacter());
+            } else if (key != null && key.getKind() == Enter) {
+                terminal.putCharacter((key.getCharacter()));
+                break;
+            }
+
+        }
+        return name;
+    }
     private void printHighscore(Terminal terminal) {
         int y = 10;
         for (PlayerScore p : highScore) {

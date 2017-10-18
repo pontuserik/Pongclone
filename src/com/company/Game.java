@@ -18,23 +18,29 @@ public class Game {
 
 
     List<GameObject> gameObjects = new ArrayList<>();
+    boolean isDead = false;
     int player1Score = 0;
 
     public void getKeyPress(Terminal terminal, GameObject player1,
         GameObject opponent, GameObject ball) throws InterruptedException {
         while(true){
+            if (isDead == true) {
+                break;
+            }
         //Wait for a key to be pressed
             Key key;
             do {
                 Thread.sleep(100);
-                moveBall(ball, player1, opponent);
+                try {
+                    moveBall(ball, player1, opponent, terminal);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 moveOpponent(ball, opponent);
                 key = terminal.readInput();
                 terminal.clearScreen();
                 drawScreen(terminal);
-
-            }
-            while (key == null);
+            } while (key == null);
             System.out.println(key.getCharacter() + " " + key.getKind());
 
 
@@ -151,7 +157,7 @@ public class Game {
 
     }
 
-    public void moveBall(GameObject ball, GameObject player1, GameObject opponent){
+    public void moveBall(GameObject ball, GameObject player1, GameObject opponent, Terminal terminal) throws IOException, InterruptedException {
         Position ballCurrentPosition = ball.getCurrentPosition();
         Position playerCurrentPosition = player1.getCurrentPosition();
         Position opponentCurrentPosition = opponent.getCurrentPosition();
@@ -193,8 +199,9 @@ public class Game {
                 moveObject(ball, new Move("PlayerBallMaxDown"));
             } else {
                 // Dies.
-                player1Score = 0;
-
+                ball.setCurrentPosition(new Position(50, 15));
+                isDead = true;      // We're dead!
+                System.out.println("You are dead!");
             }
         } else if (ballCurrentPosition.x == opponentCurrentPosition.x) {
             if (ballCurrentPosition.y == opponentCurrentPosition.y - 2) {
@@ -233,7 +240,7 @@ public class Game {
                 ball.setMove(new Move("OpponentBallMaxDown"));
                 moveObject(ball, new Move("OpponentBallMaxDown"));
             } else {
-                // Dies.
+                // Score!
                 player1Score += 1;
                 ball.setCurrentPosition(new Position(50, 15));
                 ball.setMove(new Move("OpponentBallCenter"));
@@ -277,6 +284,8 @@ public class Game {
                     moveObject(ball, new Move("OpponentBallMidUp"));
                     break;
             }
+        } else if (isDead) {
+             
         } else {
             moveObject(ball, ball.getMove());
         }

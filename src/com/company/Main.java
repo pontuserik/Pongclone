@@ -17,11 +17,14 @@ import java.nio.charset.Charset;
                 terminal.enterPrivateMode();
                 terminal.setCursorVisible(false);
 
-                
+
                 StartGame startGame = new StartGame();
                 startGame.startGameApp(terminal);
                 Game game = new Game();
                 game.doGame(terminal);
+                GameOver gameOver = new GameOver();
+                gameOver.endGame(23, terminal);
+
 
                 }
             }
