@@ -4,11 +4,19 @@ import com.googlecode.lanterna.TerminalFacade;
 import com.googlecode.lanterna.input.Key;
 import com.googlecode.lanterna.terminal.Terminal;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
+
+
     List<GameObject> gameObjects = new ArrayList<>();
 
     public void getKeyPress(Terminal terminal, GameObject player1,
@@ -51,7 +59,13 @@ public class Game {
         GameObject player1 = gameObjects.get(1);
         GameObject opponent = gameObjects.get(2);
 
-
+        int port = 5000;
+        try {
+            Thread t = new GreetingServer(port, opponent);
+            t.start();
+        }catch(IOException e) {
+            e.printStackTrace();
+        }
         drawScreen(terminal);
         getKeyPress(terminal, player1, opponent, ball);
         terminal.exitPrivateMode();
@@ -146,14 +160,14 @@ public class Game {
         Position ballPosition = ball.getCurrentPosition();
         Position opponentPosition = opponent.getCurrentPosition();
 
-        if (opponentPosition.y < ballPosition.y) {
+        /*if (opponentPosition.y < ballPosition.y) {
             opponent.setCurrentPosition(new Position(opponentPosition.x, opponentPosition.y + 1));
             moveObject(opponent, new Move("OpponentPaddleDown"));
         } else if (opponentPosition.y > ballPosition.y) {
             opponent.setCurrentPosition(new Position(opponentPosition.x, opponentPosition.y - 1));
             moveObject(opponent, new Move("OpponentPaddleUp"));
         }
-
+*/
 
 
     }
@@ -290,5 +304,57 @@ public class Game {
         terminal.moveCursor(currentPosition.x, currentPosition.y + 2);
         terminal.putCharacter(gameObject.getRepresentation());
         terminal.moveCursor(0,0);
+    }
+}
+
+class GreetingServer extends Thread {
+    private ServerSocket serverSocket;
+    private GameObject opponent;
+
+    public GreetingServer(int port, GameObject opponent) throws IOException {
+        serverSocket = new ServerSocket(port);
+        this.opponent = opponent;
+        //serverSocket.setSoTimeout(100000);
+    }
+
+    public void run() {
+        while (true) {
+            try {
+                System.out.println("Waiting for client on port " +
+                        serverSocket.getLocalPort() + "...");
+                Socket server = serverSocket.accept();
+
+                System.out.println("Just connected to " + server.getRemoteSocketAddress());
+                DataInputStream in = new DataInputStream(server.getInputStream());
+                DataOutputStream out = new DataOutputStream(server.getOutputStream());
+                out.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress());
+                while (true) {
+
+                    String temp = in.readUTF();
+                    System.out.println("Recieved " + temp);
+                    if(temp.equals("1")) {
+                        opponent.setCurrentPosition(new Position(opponent.getCurrentPosition().x, opponent.getCurrentPosition().y + 1));
+
+                        opponent.setMove(new Move("OpponentPaddleUp"));
+
+                    }
+                    if(temp.equals("2")) {
+                        opponent.setCurrentPosition(new Position(opponent.getCurrentPosition().x, opponent.getCurrentPosition().y - 1));
+
+                        opponent.setMove(new Move("OpponentPaddleDown"));
+
+                    }
+
+                }
+                // server.close();
+            } catch (SocketTimeoutException s) {
+                System.out.println("Socket timed out!");
+                break;
+            } catch (IOException e) {
+                e.printStackTrace();
+                break;
+            }
+
+        }
     }
 }
