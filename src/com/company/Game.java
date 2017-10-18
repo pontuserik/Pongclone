@@ -167,8 +167,28 @@ public class Game {
                 ball.setMove(new Move("PlayerBallMidUp"));
                 moveObject(ball, new Move("PlayerBallMidUp"));
             } else if (ballCurrentPosition.y == playerCurrentPosition.y) {
-                ball.setMove(new Move("PlayerBallCenter"));
-                moveObject(ball, new Move("PlayerBallCenter"));
+                switch(ball.getMove().move) {
+                    case "OpponentBallMaxUp":
+                        ball.setMove(new Move("PlayerBallMaxDown"));
+                        moveObject(ball, new Move("PlayerBallMaxDown"));
+                        break;
+                    case "OpponentBallMidUp":
+                        ball.setMove(new Move("PlayerBallMidDown"));
+                        moveObject(ball, new Move("PlayerBallMidDown"));
+                        break;
+                    case "OpponentBallCenter":
+                        ball.setMove(new Move("PlayerBallCenter"));
+                        moveObject(ball, new Move("PlayerBallCenter"));
+                        break;
+                    case "OpponentBallMidDown":
+                        ball.setMove(new Move("PlayerBallMidUp"));
+                        moveObject(ball, new Move("PlayerBallMidUp"));
+                        break;
+                    case "OpponentBallMaxDown":
+                        ball.setMove(new Move("PlayerBallMaxUp"));
+                        moveObject(ball, new Move("PlayerBallMaxUp"));
+                        break;
+                }
             } else if (ballCurrentPosition.y == playerCurrentPosition.y + 1) {
                 ball.setMove(new Move("PlayerBallMidDown"));
                 moveObject(ball, new Move("PlayerBallMidDown"));
@@ -186,8 +206,28 @@ public class Game {
                 ball.setMove(new Move("OpponentBallMidUp"));
                 moveObject(ball, new Move("OpponentBallMidUp"));
             } else if (ballCurrentPosition.y == opponentCurrentPosition.y) {
-                ball.setMove(new Move("OpponentBallCenter"));
-                moveObject(ball, new Move("OpponentBallCenter"));
+                switch(ball.getMove().move) {
+                    case "PlayerBallMaxUp":
+                        ball.setMove(new Move("OpponentBallMaxDown"));
+                        moveObject(ball, new Move("OpponentBallMaxDown"));
+                        break;
+                    case "PlayerBallMidUp":
+                        ball.setMove(new Move("OpponentBallMidDown"));
+                        moveObject(ball, new Move("OpponentBallMidDown"));
+                        break;
+                    case "PlayerBallCenter":
+                        ball.setMove(new Move("OpponentBallCenter"));
+                        moveObject(ball, new Move("OpponentBallCenter"));
+                        break;
+                    case "PlayerBallMidDown":
+                        ball.setMove(new Move("OpponentBallMidUp"));
+                        moveObject(ball, new Move("OpponentBallMidUp"));
+                        break;
+                    case "PlayerBallMaxDown":
+                        ball.setMove(new Move("OpponentBallMaxUp"));
+                        moveObject(ball, new Move("OpponentBallMaxUp"));
+                        break;
+                }
             } else if (ballCurrentPosition.y == opponentCurrentPosition.y + 1) {
                 ball.setMove(new Move("OpponentBallMidDown"));
                 moveObject(ball, new Move("OpponentBallMidDown"));
