@@ -69,7 +69,9 @@ public class StartGame {
                         System.exit(0);
                         threading.halt(sequencer);
                     }
-
+                default:
+                    threading.halt(sequencer);
+                    break;
             }
             break;
         }

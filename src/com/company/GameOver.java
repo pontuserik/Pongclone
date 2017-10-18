@@ -59,8 +59,8 @@ public class GameOver {
     private void printHighscore(Terminal terminal) {
         int y = 10;
         for (PlayerScore p : highScore) {
-            String temp = p.score + " " + p.name;
-            terminal.moveCursor(10, y++);
+            String temp = p.name + " " + p.score;
+            terminal.moveCursor(40, y++);
             for (int i = 0; i < temp.length(); i++) {
                 terminal.putCharacter(temp.charAt(i));
             }

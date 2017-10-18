@@ -55,7 +55,7 @@ public class Game {
         }
     }
 
-    public void doGame(Terminal terminal)throws InterruptedException {
+    public int doGame(Terminal terminal)throws InterruptedException {
 
         getObjectsList(gameObjects);
         GameObject ball = gameObjects.get(0);
@@ -71,7 +71,8 @@ public class Game {
         }
         drawScreen(terminal);
         getKeyPress(terminal, player1, opponent, ball);
-        terminal.exitPrivateMode();
+
+        return player1Score;
     }
 
     public void getObjectsList(List<GameObject> gameObjects) {
@@ -284,10 +285,10 @@ public class Game {
                     moveObject(ball, new Move("OpponentBallMidUp"));
                     break;
             }
-        } else if (isDead) {
-             
         } else {
-            moveObject(ball, ball.getMove());
+            if(isDead == false) {
+                moveObject(ball, ball.getMove());
+            }
         }
     }
 
