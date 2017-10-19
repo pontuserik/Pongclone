@@ -1,33 +1,26 @@
 package com.company;
-
-import com.googlecode.lanterna.TerminalFacade;
 import com.googlecode.lanterna.input.Key;
 import com.googlecode.lanterna.terminal.Terminal;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
-
-
     List<GameObject> gameObjects = new ArrayList<>();
     boolean isDead = false;
     int player1Score = 0;
 
-    public void getKeyPress(Terminal terminal, GameObject player1,
-        GameObject opponent, GameObject ball, int players) throws InterruptedException {
+    private void gameLoop(Terminal terminal, GameObject player1,
+                          GameObject opponent, GameObject ball, int players) throws InterruptedException {
         while(true){
             if (isDead == true) {
                 break;
             }
-        //Wait for a key to be pressed
             Key key;
             do {
                 Thread.sleep(75);
@@ -43,7 +36,6 @@ public class Game {
             } while (key == null);
             System.out.println(key.getCharacter() + " " + key.getKind());
 
-
             switch (key.getKind()) {
                 case ArrowDown:
                     moveObject(player1, new Move("PaddleDown"));
@@ -56,12 +48,10 @@ public class Game {
     }
 
     public int doGame(Terminal terminal, int players)throws InterruptedException {
-
         getObjectsList(gameObjects);
         GameObject ball = gameObjects.get(0);
         GameObject player1 = gameObjects.get(1);
         GameObject opponent = gameObjects.get(2);
-
         int port = 5000;
         try {
             Thread t = new GreetingServer(port, opponent);
@@ -70,21 +60,17 @@ public class Game {
             e.printStackTrace();
         }
         drawScreen(terminal);
-        getKeyPress(terminal, player1, opponent, ball, players);
-
+        gameLoop(terminal, player1, opponent, ball, players);
         return player1Score;
     }
 
-    public void getObjectsList(List<GameObject> gameObjects) {
+    private void getObjectsList(List<GameObject> gameObjects) {
         gameObjects.add(new Ball(new Position(50, 15)));
         gameObjects.add(new Paddle(new Position(2, 15)));
         gameObjects.add(new Paddle(new Position(98, 15)));
     }
-
-    public void moveObject(GameObject gameObject, Move move) {
-
+    private void moveObject(GameObject gameObject, Move move) {
         Position currentPosition = gameObject.getCurrentPosition();
-
         switch (move.move) {
             case "PaddleDown":
                 if (currentPosition.y+2 < 29 ) {
@@ -92,8 +78,6 @@ public class Game {
                     gameObject.setCurrentPosition(currentPosition);
                 }
                 break;
-
-
             case "PaddleUp":
                 if ( currentPosition.y-2 > 0 ) {
                     currentPosition = new Position(currentPosition.x, currentPosition.y - 1);
@@ -142,20 +126,12 @@ public class Game {
             case "OpponentBallMaxDown":
                 gameObject.setCurrentPosition(new Position(currentPosition.x - 2, currentPosition.y + 2));
                 break;
-
         }
-
     }
-
-    public void moveOpponent(GameObject ball, GameObject opponent, int players) {
-
-        // Check the opponent.getPosition().y agains ball.getPosition().y
-        // if <, ++opponent
-        // if >, --opponent
+    private void moveOpponent(GameObject ball, GameObject opponent, int players) {
         if(players == 1) {
             Position ballPosition = ball.getCurrentPosition();
             Position opponentPosition = opponent.getCurrentPosition();
-
             if (opponentPosition.y < ballPosition.y) {
                 opponent.setCurrentPosition(new Position(opponentPosition.x, opponentPosition.y + 1));
                 moveObject(opponent, new Move("OpponentPaddleDown"));
@@ -164,11 +140,8 @@ public class Game {
                 moveObject(opponent, new Move("OpponentPaddleUp"));
             }
         }
-
-
     }
-
-    public void moveBall(GameObject ball, GameObject player1, GameObject opponent, Terminal terminal) throws IOException, InterruptedException {
+    private void moveBall(GameObject ball, GameObject player1, GameObject opponent, Terminal terminal) throws IOException, InterruptedException {
         Position ballCurrentPosition = ball.getCurrentPosition();
         Position playerCurrentPosition = player1.getCurrentPosition();
         Position opponentCurrentPosition = opponent.getCurrentPosition();
@@ -210,11 +183,9 @@ public class Game {
                 ball.setMove(new Move("PlayerBallMaxDown"));
                 moveObject(ball, new Move("PlayerBallMaxDown"));
             } else {
-                // Dies.
                 ball.setCurrentPosition(new Position(50, 15));
-                isDead = true;      // We're dead!
+                isDead = true;
                 player1Score--;
-                System.out.println("You are dead!");
             }
         } else if (ballCurrentPosition.x == opponentCurrentPosition.x) {
             if (ballCurrentPosition.y == opponentCurrentPosition.y - 2) {
@@ -253,7 +224,6 @@ public class Game {
                 ball.setMove(new Move("OpponentBallMaxDown"));
                 moveObject(ball, new Move("OpponentBallMaxDown"));
             } else {
-                // Score!
                 player1Score += 1;
                 ball.setCurrentPosition(new Position(50, 15));
                 ball.setMove(new Move("OpponentBallCenter"));
@@ -276,7 +246,6 @@ public class Game {
                     ball.setMove(new Move("OpponentBallMidDown"));
                     moveObject(ball, new Move("OpponentBallMidDown"));
                     break;
-
             }
         } else if (ballCurrentPosition.y >= 30) {
             switch (ball.getMove().move) {
@@ -303,15 +272,11 @@ public class Game {
             }
         }
     }
-
-    public void drawScreen(Terminal terminal){
-
+    private void drawScreen(Terminal terminal){
         for (GameObject gameObject : gameObjects) {
             drawObject(gameObject, terminal);
         }
-
         char[] player1ScoreCharArray = (" " + player1Score).toCharArray();
-
         int i = 0;
         for (char c : player1ScoreCharArray) {
             terminal.moveCursor(5 + i, 2);
@@ -319,12 +284,8 @@ public class Game {
             terminal.moveCursor(0,0);
             i++;
         }
-
-
     }
-
-    public void drawObject(GameObject gameObject, Terminal terminal) {
-
+    private void drawObject(GameObject gameObject, Terminal terminal) {
        switch(gameObject.getGameObjectType()) {
            case "Ball":
                drawBall(terminal, gameObject);
@@ -333,17 +294,14 @@ public class Game {
                drawPaddle(terminal, gameObject);
                break;
        }
-
     }
-
-    public void drawBall(Terminal terminal, GameObject gameObject){
+    private void drawBall(Terminal terminal, GameObject gameObject){
         Position currentPosition = gameObject.getCurrentPosition();
         terminal.moveCursor(currentPosition.x, currentPosition.y);
         terminal.putCharacter(gameObject.getRepresentation());
         terminal.moveCursor(0,0);
     }
-
-    public void drawPaddle(Terminal terminal, GameObject gameObject){
+    private void drawPaddle(Terminal terminal, GameObject gameObject){
         Position currentPosition = gameObject.getCurrentPosition();
         terminal.moveCursor(currentPosition.x, currentPosition.y - 2);
         terminal.putCharacter(gameObject.getRepresentation());
@@ -359,53 +317,4 @@ public class Game {
     }
 }
 
-class GreetingServer extends Thread {
-    private ServerSocket serverSocket;
-    private GameObject opponent;
 
-    public GreetingServer(int port, GameObject opponent) throws IOException {
-        serverSocket = new ServerSocket(port);
-        this.opponent = opponent;
-        //serverSocket.setSoTimeout(100000);
-    }
-
-    public void run() {
-        while (true) {
-            try {
-                System.out.println("Waiting for client on port " +
-                        serverSocket.getLocalPort() + "...");
-                Socket server = serverSocket.accept();
-
-                System.out.println("Just connected to " + server.getRemoteSocketAddress());
-                DataInputStream in = new DataInputStream(server.getInputStream());
-                DataOutputStream out = new DataOutputStream(server.getOutputStream());
-                out.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress());
-                while (true) {
-
-                    String temp = in.readUTF();
-                    System.out.println("Recieved " + temp);
-                    if(temp.equals("1")) {
-                        opponent.setCurrentPosition(new Position(opponent.getCurrentPosition().x, opponent.getCurrentPosition().y + 1));
-
-                        opponent.setMove(new Move("OpponentPaddleUp"));
-
-                    }
-                    if(temp.equals("2")) {
-                        opponent.setCurrentPosition(new Position(opponent.getCurrentPosition().x, opponent.getCurrentPosition().y - 1));
-
-                        opponent.setMove(new Move("OpponentPaddleDown"));
-
-                    }
-                }
-                // server.close();
-            } catch (SocketTimeoutException s) {
-                System.out.println("Socket timed out!");
-                break;
-            } catch (IOException e) {
-                e.printStackTrace();
-                break;
-            }
-
-        }
-    }
-}

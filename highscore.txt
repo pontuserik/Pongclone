@@ -1,10 +1,5 @@
-11 Test
-11 Test
-8 nnn
-8 nnn
-5 ppp
-5 ppp
-3 Jimmy
-3 nnntjjjj
-3 Jimmy
-0 hej
+1337 Alexander
+101 Jimmy
+100 Thommy
+99 Pontus
+-1 Claesjaevel

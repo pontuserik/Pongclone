@@ -1,67 +1,36 @@
 package com.company;
 import com.googlecode.lanterna.input.Key;
 import com.googlecode.lanterna.terminal.Terminal;
-
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequencer;
 import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.*;
-
-import static com.googlecode.lanterna.input.Key.Kind.ArrowUp;
 import static com.googlecode.lanterna.input.Key.Kind.Enter;
 
 public class GameOver {
-
     private List<PlayerScore> highScore = new ArrayList<>();
-
-
-
     public void endGame(int points, Terminal terminal) throws IOException, InterruptedException, InvalidMidiDataException, MidiUnavailableException {
         Sequencer sequencer = startMusic();
-
         doThread threading = new doThread(sequencer);
-
         threading.start();
         String name = playerName(terminal);
-
-        PlayerScore player = new PlayerScore(name, points);
-
-
-
         playerName(terminal);
         showBanner(terminal);
         printWriteFile(points,name);
         printHighscore(terminal);
         printMenu(terminal);
     }
-
-
     private void printMenu(Terminal terminal) throws InterruptedException {
-        //String playAgain = "Play again?";
         String quitGame = "Quit Game";
-
-     /*   terminal.moveCursor(40,22);
-        for (int i = 0; i< playAgain.length();i++) {
-            terminal.putCharacter(playAgain.charAt(i));
-        }*/
-
         terminal.moveCursor(40,24);
         for (int i = 0; i< quitGame.length();i++) {
             terminal.putCharacter(quitGame.charAt(i));
         }
-
         terminal.moveCursor(38,24);
         terminal.putCharacter('*');
-
-
         int position = 1;
-     /*   terminal.moveCursor(38,22);
-        terminal.putCharacter('*');*/
         while(true){
             Key key;
             do {
@@ -70,49 +39,19 @@ public class GameOver {
             }
             while (key == null);
             System.out.println(key.getCharacter() + " " + key.getKind());
-
-
             switch (key.getKind()) {
-                /*case ArrowDown:
-                        terminal.moveCursor(38, 22);
-                        terminal.putCharacter(' ');
-
-                        terminal.moveCursor(38, 24);
-                        terminal.putCharacter('*');
-                        position = 2;
-
-                    break;
-
-                case ArrowUp:
-                        terminal.moveCursor(38, 24);
-                        terminal.putCharacter(' ');
-                        terminal.moveCursor(38, 22);
-                        terminal.putCharacter('*');
-                        position = 1;
-
-                    break;*/
-
                 case Enter:
                     if(position == 1) {
                         System.exit(0);
                         break;
                     }
-
-                    if(position == 2) {
-                        System.exit(0);
-                        break;
-                    }
-                default:
-                    break;
-
+                default: break;
             }
             if(key.getKind() == Enter) {
                 break;
             }
         }
-
     }
-
     private String playerName(Terminal terminal) throws InterruptedException {
         terminal.clearScreen();
         terminal.setCursorVisible(true);
@@ -121,11 +60,9 @@ public class GameOver {
         for (int i = 0; i < writeName.length();i++) {
             terminal.putCharacter(writeName.charAt(i));
         }
-
         String name = "";
         String keyString = "";
         Key key;
-
         while(true) {
             key = terminal.readInput();
             if (key != null && key.getKind() != Enter) {
@@ -136,7 +73,6 @@ public class GameOver {
                 terminal.putCharacter((key.getCharacter()));
                 break;
             }
-
         }
         return name;
     }
@@ -150,14 +86,12 @@ public class GameOver {
             }
         }
     }
-
     private void showBanner(Terminal terminal) throws FileNotFoundException {
         terminal.clearScreen();
         terminal.setCursorVisible(false);
         String banner = "gameover.txt";
         File fileBanner = new File(banner);
         Scanner printBanner = new Scanner(fileBanner);
-
         int q = 1;
         while (printBanner.hasNextLine()) {
             String tempLine = printBanner.nextLine();
@@ -167,7 +101,6 @@ public class GameOver {
             }
         }
     }
-
     private void printWriteFile(int points, String name) throws IOException {
         String input = "highscore.txt";
         File f = new File((input));
@@ -184,8 +117,6 @@ public class GameOver {
                 counter++;
             }
             highScore.add(new PlayerScore(name, points));
-
-
             Collections.sort(highScore, new Comparator<PlayerScore>() {
                 @Override
                 public int compare(PlayerScore o1, PlayerScore o2) {
@@ -193,15 +124,12 @@ public class GameOver {
                 }
             });
            Collections.reverse(highScore);
-
         } else {
             f.createNewFile();
             highScore.add(new PlayerScore(name,points));
         }
         FileWriter writer = new FileWriter(input);
         BufferedWriter bw = new BufferedWriter(writer);
-
-
         for (PlayerScore player: highScore){
             bw.write(player.score + " " + player.name + "\n");
         }
@@ -209,14 +137,11 @@ public class GameOver {
         bw.close();
         writer.close();
     }
-
     private Sequencer startMusic() throws MidiUnavailableException, IOException, InvalidMidiDataException {
         Sequencer sequencer = MidiSystem.getSequencer();
-
         sequencer.open();
         String path3 = "gameover.mid";
         InputStream gameover = new BufferedInputStream(new FileInputStream(new File(path3)));
-
         sequencer.setSequence(gameover);
         return sequencer;
     }

@@ -1,9 +1,7 @@
 package com.company;
 
 import com.googlecode.lanterna.*;
-import com.googlecode.lanterna.input.Key;
 import com.googlecode.lanterna.terminal.Terminal;
-
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 import java.io.IOException;
@@ -16,21 +14,13 @@ import java.nio.charset.Charset;
                         System.out, Charset.forName("UTF8"));
                 terminal.enterPrivateMode();
                 terminal.setCursorVisible(false);
-
-
                 StartGame startGame = new StartGame();
                 Game game = new Game();
                 GameOver gameOver = new GameOver();
 
                 int players = startGame.startGameApp(terminal);
-
-                System.out.println(players);
-
-
-                    int player1Score = game.doGame(terminal, players);
-
-                    gameOver.endGame(player1Score, terminal);
-
+                int player1Score = game.doGame(terminal, players);
+                gameOver.endGame(player1Score, terminal);
                 }
             }
 
