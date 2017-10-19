@@ -124,7 +124,7 @@ public class StartGame {
         terminal.setCursorVisible(false);
 
         String onePlayer = "One Player";
-        String twoPlayer = "Two Players;";
+        String twoPlayer = "Two Players";
         String quitGame = "Quit Game";
 
         terminal.moveCursor(20,20);
