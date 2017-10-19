@@ -2,7 +2,14 @@ package com.company;
 import com.googlecode.lanterna.input.Key;
 import com.googlecode.lanterna.terminal.Terminal;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequencer;
 import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.*;
 
 import static com.googlecode.lanterna.input.Key.Kind.ArrowUp;
@@ -14,8 +21,12 @@ public class GameOver {
 
 
 
-    public void endGame(int points, Terminal terminal) throws IOException, InterruptedException {
+    public void endGame(int points, Terminal terminal) throws IOException, InterruptedException, InvalidMidiDataException, MidiUnavailableException {
+        Sequencer sequencer = startMusic();
 
+        doThread threading = new doThread(sequencer);
+
+        threading.start();
         String name = playerName(terminal);
 
         PlayerScore player = new PlayerScore(name, points);
@@ -124,6 +135,17 @@ public class GameOver {
         bw.flush();
         bw.close();
         writer.close();
+    }
+
+    private Sequencer startMusic() throws MidiUnavailableException, IOException, InvalidMidiDataException {
+        Sequencer sequencer = MidiSystem.getSequencer();
+
+        sequencer.open();
+        String path3 = "gameover.mid";
+        InputStream gameover = new BufferedInputStream(new FileInputStream(new File(path3)));
+
+        sequencer.setSequence(gameover);
+        return sequencer;
     }
 }
 
