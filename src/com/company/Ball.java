@@ -3,7 +3,7 @@ package com.company;
 public class Ball implements GameObject {
     String gameObjectType = "Ball";
     Position currentPosition;
-    char representation = '\u01C4';
+    char representation = '\u2588';
     Move move = new Move("OpponentBallCenter");
 
     public Ball(Position currentPosition) {
