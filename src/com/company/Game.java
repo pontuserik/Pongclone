@@ -87,22 +87,30 @@ public class Game {
 
         switch (move.move) {
             case "PaddleDown":
-                currentPosition = new Position(currentPosition.x, currentPosition.y + 1);
-                gameObject.setCurrentPosition(currentPosition);
+                if (currentPosition.y+2 < 29 ) {
+                    currentPosition = new Position(currentPosition.x, currentPosition.y + 1);
+                    gameObject.setCurrentPosition(currentPosition);
+                }
                 break;
+
+
             case "PaddleUp":
                 if ( currentPosition.y-2 > 0 ) {
                     currentPosition = new Position(currentPosition.x, currentPosition.y - 1);
                     gameObject.setCurrentPosition(currentPosition);
                 }
                 break;
-            case "OpponentPaddleUp":
-                currentPosition = new Position(currentPosition.x, currentPosition.y - 1);
-                gameObject.setCurrentPosition(currentPosition);
-                break;
             case "OpponentPaddleDown":
-                currentPosition = new Position(currentPosition.x, currentPosition.y + 1);
-                gameObject.setCurrentPosition(currentPosition);
+                if (currentPosition.y+2 < 28 ) {
+                    currentPosition = new Position(currentPosition.x, currentPosition.y + 1);
+                    gameObject.setCurrentPosition(currentPosition);
+                }
+                break;
+            case "OpponentPaddleUp":
+                if (currentPosition.y-2 > 0 ) {
+                    currentPosition = new Position(currentPosition.x, currentPosition.y - 1);
+                    gameObject.setCurrentPosition(currentPosition);
+                }
                 break;
             case "PlayerBallMaxUp":
                 gameObject.setCurrentPosition(new Position(currentPosition.x + 2, currentPosition.y - 2));
