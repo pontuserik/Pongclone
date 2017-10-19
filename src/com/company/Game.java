@@ -163,6 +163,7 @@ public class Game {
         Position playerCurrentPosition = player1.getCurrentPosition();
         Position opponentCurrentPosition = opponent.getCurrentPosition();
         if (ballCurrentPosition.x == playerCurrentPosition.x) {
+            player1Score += 1;
             if (ballCurrentPosition.y == playerCurrentPosition.y - 2) {
                 ball.setMove(new Move("PlayerBallMaxUp"));
                 moveObject(ball, new Move("PlayerBallMaxUp"));
@@ -202,6 +203,7 @@ public class Game {
                 // Dies.
                 ball.setCurrentPosition(new Position(50, 15));
                 isDead = true;      // We're dead!
+                player1Score--;
                 System.out.println("You are dead!");
             }
         } else if (ballCurrentPosition.x == opponentCurrentPosition.x) {
