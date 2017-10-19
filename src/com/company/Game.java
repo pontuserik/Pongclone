@@ -22,7 +22,7 @@ public class Game {
     int player1Score = 0;
 
     public void getKeyPress(Terminal terminal, GameObject player1,
-        GameObject opponent, GameObject ball) throws InterruptedException {
+        GameObject opponent, GameObject ball, int players) throws InterruptedException {
         while(true){
             if (isDead == true) {
                 break;
@@ -30,13 +30,13 @@ public class Game {
         //Wait for a key to be pressed
             Key key;
             do {
-                Thread.sleep(100);
+                Thread.sleep(75);
                 try {
                     moveBall(ball, player1, opponent, terminal);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                moveOpponent(ball, opponent);
+                moveOpponent(ball, opponent, players);
                 key = terminal.readInput();
                 terminal.clearScreen();
                 drawScreen(terminal);
@@ -55,7 +55,7 @@ public class Game {
         }
     }
 
-    public int doGame(Terminal terminal)throws InterruptedException {
+    public int doGame(Terminal terminal, int players)throws InterruptedException {
 
         getObjectsList(gameObjects);
         GameObject ball = gameObjects.get(0);
@@ -70,7 +70,7 @@ public class Game {
             e.printStackTrace();
         }
         drawScreen(terminal);
-        getKeyPress(terminal, player1, opponent, ball);
+        getKeyPress(terminal, player1, opponent, ball, players);
 
         return player1Score;
     }
@@ -137,23 +137,23 @@ public class Game {
 
     }
 
-    public void moveOpponent(GameObject ball, GameObject opponent) {
+    public void moveOpponent(GameObject ball, GameObject opponent, int players) {
 
         // Check the opponent.getPosition().y agains ball.getPosition().y
         // if <, ++opponent
         // if >, --opponent
+        if(players == 1) {
+            Position ballPosition = ball.getCurrentPosition();
+            Position opponentPosition = opponent.getCurrentPosition();
 
-        Position ballPosition = ball.getCurrentPosition();
-        Position opponentPosition = opponent.getCurrentPosition();
-
-        /*if (opponentPosition.y < ballPosition.y) {
-            opponent.setCurrentPosition(new Position(opponentPosition.x, opponentPosition.y + 1));
-            moveObject(opponent, new Move("OpponentPaddleDown"));
-        } else if (opponentPosition.y > ballPosition.y) {
-            opponent.setCurrentPosition(new Position(opponentPosition.x, opponentPosition.y - 1));
-            moveObject(opponent, new Move("OpponentPaddleUp"));
+            if (opponentPosition.y < ballPosition.y) {
+                opponent.setCurrentPosition(new Position(opponentPosition.x, opponentPosition.y + 1));
+                moveObject(opponent, new Move("OpponentPaddleDown"));
+            } else if (opponentPosition.y > ballPosition.y) {
+                opponent.setCurrentPosition(new Position(opponentPosition.x, opponentPosition.y - 1));
+                moveObject(opponent, new Move("OpponentPaddleUp"));
+            }
         }
-*/
 
 
     }

@@ -13,9 +13,11 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Scanner;
 
+import static com.googlecode.lanterna.input.Key.Kind.Enter;
+
 public class StartGame {
 
-    public void startGameApp(Terminal terminal) throws IOException, InterruptedException, MidiUnavailableException, InvalidMidiDataException {
+    public int startGameApp(Terminal terminal) throws IOException, InterruptedException, MidiUnavailableException, InvalidMidiDataException {
 
         Sequencer sequencer = startMusic();
 
@@ -25,16 +27,19 @@ public class StartGame {
 
         showBanner(terminal);
 
-        menu(terminal, sequencer, threading);
-
+        return menu(terminal, sequencer, threading);
 
 
     }
 
 
 
-    private void menu(Terminal terminal, Sequencer sequencer, doThread threading) throws InterruptedException {
+    private int menu(Terminal terminal, Sequencer sequencer, doThread threading) throws InterruptedException {
         int position = 1;
+        int y = 20;
+        int  players = 1;
+        terminal.moveCursor(18,20);
+        terminal.putCharacter('*');
         while(true){
             Key key;
             do {
@@ -47,34 +52,61 @@ public class StartGame {
 
             switch (key.getKind()) {
                 case ArrowDown:
-                    terminal.moveCursor(18,20);
-                    terminal.putCharacter(' ');
-                    terminal.moveCursor(18,22);
-                    terminal.putCharacter('*');
-                    position = 2;
-                    break;
+                    if(y<24) {
+                        terminal.moveCursor(18, y);
+                        terminal.putCharacter(' ');
+                        y += 2;
+                        terminal.moveCursor(18, y);
+                        terminal.putCharacter('*');
+                        position++;
+                    }
+                        break;
+
                 case ArrowUp:
-                    terminal.moveCursor(18,20);
-                    terminal.putCharacter('*');
-                    terminal.moveCursor(18,22);
-                    terminal.putCharacter(' ');;
-                    position = 1;
-                    break;
+                    if(y>20) {
+                        terminal.moveCursor(18, y);
+                        terminal.putCharacter(' ');
+                        y -= 2;
+                        terminal.moveCursor(18, y);
+                        terminal.putCharacter('*');
+                        position--;
+                    }
+                        break;
+
                 case Enter:
                     if(position == 1) {
                         threading.halt(sequencer);
+                        System.out.println("One Player");
+                        players = 1;
                         break;
                     }
-                    if (position == 2) {
+
+                    if(position == 2) {
+                        threading.halt(sequencer);
+                        System.out.println("Two Players");
+                        players = 2;
+                        break;
+                    }
+
+
+                    if (position == 3) {
                         System.exit(0);
                         threading.halt(sequencer);
+                        break;
                     }
+                    break;
                 default:
                     threading.halt(sequencer);
                     break;
+
+
             }
-            break;
+            if(key.getKind() == Enter) {
+                break;
+            }
         }
+        return players;
+
     }
 
     private void showBanner(Terminal terminal) throws FileNotFoundException {
@@ -91,15 +123,22 @@ public class StartGame {
         }
         terminal.setCursorVisible(false);
 
-        String startGame = "Start Game";
+        String onePlayer = "One Player";
+        String twoPlayer = "Two Players;";
         String quitGame = "Quit Game";
 
         terminal.moveCursor(20,20);
-        for (int i = 0; i< startGame.length();i++) {
-            terminal.putCharacter(startGame.charAt(i));
+        for (int i = 0; i< onePlayer.length();i++) {
+            terminal.putCharacter(onePlayer.charAt(i));
         }
 
         terminal.moveCursor(20,22);
+        for (int i = 0; i< twoPlayer.length();i++) {
+            terminal.putCharacter(twoPlayer.charAt(i));
+        }
+
+
+        terminal.moveCursor(20,24);
         for (int i = 0; i< quitGame.length();i++) {
             terminal.putCharacter(quitGame.charAt(i));
         }

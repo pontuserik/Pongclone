@@ -19,10 +19,15 @@ import java.nio.charset.Charset;
 
 
                 StartGame startGame = new StartGame();
-                startGame.startGameApp(terminal);
                 Game game = new Game();
-                int player1Score = game.doGame(terminal);
                 GameOver gameOver = new GameOver();
+
+                int players = startGame.startGameApp(terminal);
+
+                System.out.println(players);
+
+                int player1Score = game.doGame(terminal, players);
+
                 gameOver.endGame(player1Score, terminal);
 
                 }
