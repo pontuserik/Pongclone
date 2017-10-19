@@ -1,10 +1,4 @@
-20000 Jimmy
-20000 Jimmy
-20000 Jimmy
-20000 Jimmy
-20000 Jimmy
-10000 Jimmy
-2000 Thommy
-1 Thommy
-1 ppppnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
-0 jj
+11 Test
+8 nnn
+5 ppp
+3 Jimmy

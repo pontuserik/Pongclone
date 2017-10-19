@@ -91,8 +91,10 @@ public class Game {
                 gameObject.setCurrentPosition(currentPosition);
                 break;
             case "PaddleUp":
-                currentPosition = new Position(currentPosition.x, currentPosition.y - 1);
-                gameObject.setCurrentPosition(currentPosition);
+                if ( currentPosition.y-2 > 0 ) {
+                    currentPosition = new Position(currentPosition.x, currentPosition.y - 1);
+                    gameObject.setCurrentPosition(currentPosition);
+                }
                 break;
             case "OpponentPaddleUp":
                 currentPosition = new Position(currentPosition.x, currentPosition.y - 1);
@@ -304,7 +306,7 @@ public class Game {
 
         int i = 0;
         for (char c : player1ScoreCharArray) {
-            terminal.moveCursor(2 + i, 2);
+            terminal.moveCursor(5 + i, 2);
             terminal.putCharacter(c);
             terminal.moveCursor(0,0);
             i++;
