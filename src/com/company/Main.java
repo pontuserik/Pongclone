@@ -26,9 +26,10 @@ import java.nio.charset.Charset;
 
                 System.out.println(players);
 
-                int player1Score = game.doGame(terminal, players);
 
-                gameOver.endGame(player1Score, terminal);
+                    int player1Score = game.doGame(terminal, players);
+
+                    gameOver.endGame(player1Score, terminal);
 
                 }
             }

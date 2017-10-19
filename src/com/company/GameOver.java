@@ -37,8 +37,81 @@ public class GameOver {
         showBanner(terminal);
         printWriteFile(points,name);
         printHighscore(terminal);
+        printMenu(terminal);
     }
 
+
+    private void printMenu(Terminal terminal) throws InterruptedException {
+        //String playAgain = "Play again?";
+        String quitGame = "Quit Game";
+
+     /*   terminal.moveCursor(40,22);
+        for (int i = 0; i< playAgain.length();i++) {
+            terminal.putCharacter(playAgain.charAt(i));
+        }*/
+
+        terminal.moveCursor(40,24);
+        for (int i = 0; i< quitGame.length();i++) {
+            terminal.putCharacter(quitGame.charAt(i));
+        }
+
+        terminal.moveCursor(38,24);
+        terminal.putCharacter('*');
+
+
+        int position = 1;
+     /*   terminal.moveCursor(38,22);
+        terminal.putCharacter('*');*/
+        while(true){
+            Key key;
+            do {
+                Thread.sleep(5);
+                key = terminal.readInput();
+            }
+            while (key == null);
+            System.out.println(key.getCharacter() + " " + key.getKind());
+
+
+            switch (key.getKind()) {
+                /*case ArrowDown:
+                        terminal.moveCursor(38, 22);
+                        terminal.putCharacter(' ');
+
+                        terminal.moveCursor(38, 24);
+                        terminal.putCharacter('*');
+                        position = 2;
+
+                    break;
+
+                case ArrowUp:
+                        terminal.moveCursor(38, 24);
+                        terminal.putCharacter(' ');
+                        terminal.moveCursor(38, 22);
+                        terminal.putCharacter('*');
+                        position = 1;
+
+                    break;*/
+
+                case Enter:
+                    if(position == 1) {
+                        System.exit(0);
+                        break;
+                    }
+
+                    if(position == 2) {
+                        System.exit(0);
+                        break;
+                    }
+                default:
+                    break;
+
+            }
+            if(key.getKind() == Enter) {
+                break;
+            }
+        }
+
+    }
 
     private String playerName(Terminal terminal) throws InterruptedException {
         terminal.clearScreen();

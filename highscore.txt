@@ -1,7 +1,10 @@
 11 Test
+11 Test
+8 nnn
 8 nnn
 5 ppp
+5 ppp
 3 Jimmy
-2 pontus
-2 nepontus
-1 ppppppppppeeeeeeeeeeeeeeeeeeeeeeee
+3 nnntjjjj
+3 Jimmy
+0 hej

@@ -34,6 +34,7 @@ public class StartGame {
 
 
 
+
     private int menu(Terminal terminal, Sequencer sequencer, doThread threading) throws InterruptedException {
         int position = 1;
         int y = 20;
